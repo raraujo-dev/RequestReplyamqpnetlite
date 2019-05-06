@@ -23,9 +23,9 @@ Do the same steps in order to create another .net core project to receive the me
 
 Follow the code that will need to input inside Program.cs file:
 
-
-using System;
-using Amqp;
+```
+    using System;
+    using Amqp;
 
 namespace hello_world
 {
@@ -58,5 +58,5 @@ namespace hello_world
     }
 }
 
-
+```
 
