@@ -21,13 +21,13 @@ Inside the Example directory, add the follow ItemGroup tag into <Project> tag po
 
 Afterward replace Program.cs for the file available in this repo
 
-Do the same steps in order to create another .net core project to receive the message and display the RepluTo variable.
+Do the same steps in order to create another .NET core project to receive the message, display the ReplyTo variable and send to response address using the ReplyTo property.
 
 Follow the code that will need to input inside Program.cs file:
 
 ```
-    using System;
-    using Amqp;
+using System;
+using Amqp;
 
 namespace hello_world
 {
@@ -39,7 +39,7 @@ namespace hello_world
 
            string    url = (args.Length > 0) ? args[0] :
                 "amqp://guest:guest@127.0.0.1:5672";
-            string source = (args.Length > 1) ? args[1] : "response";
+            string source = (args.Length > 1) ? args[1] : "request";
 
             Address      peerAddr = new Address(url);
             Connection connection = new Connection(peerAddr);
@@ -48,17 +48,19 @@ namespace hello_world
 
             Message msg = receiver.Receive();
             Console.WriteLine("Received: " + msg.Properties.ReplyTo.ToString());
-
             receiver.Close();
+
+            SenderLink sender = new SenderLink(session, "send-1", msg.Properties.ReplyTo);
+            sender.Send(msg);
+            sender.Close();
+
             session.Close();
             connection.Close();
-
-
-
 
         }
     }
 }
+
 
 ```
 
